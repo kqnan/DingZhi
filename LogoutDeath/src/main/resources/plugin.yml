@@ -1,0 +1,3 @@
+name: LogoutDeath
+version: '${project.version}'
+main: me.kqn.logoutdeath.LogoutDeath
