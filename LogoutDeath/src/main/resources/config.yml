@@ -1,0 +1,2 @@
+interval: 60
+kick_message: "&c&l你已被踢出服务器，原因：频繁登录登出"

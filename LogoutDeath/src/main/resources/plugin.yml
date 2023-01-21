@@ -3,3 +3,5 @@ version: '${project.version}'
 main: me.kqn.logoutdeath.LogoutDeath
 depend:
   - WorldGuard
+commands:
+  ld:
