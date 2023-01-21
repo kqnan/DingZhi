@@ -8,6 +8,7 @@ import taboolib.common.platform.function.adaptPlayer
 import taboolib.module.chat.colored
 import taboolib.module.kether.KetherShell
 import taboolib.platform.util.onlinePlayers
+import java.util.concurrent.CompletableFuture
 import kotlin.math.max
 import kotlin.math.min
 fun Player.eval(kether:List<String>){
@@ -23,12 +24,13 @@ fun debug(msg:String){
         }
     }
 }
-fun String.eval(player:Player){
+fun String.eval(player:Player):CompletableFuture<Any?>?{
     try {
-        KetherShell.eval(this,cacheScript = true, sender = adaptPlayer(player))
+       return KetherShell.eval(this,cacheScript = true, sender = adaptPlayer(player))
     }catch (e:Exception){
         e.printStackTrace()
     }
+    return null
 }
 fun Player.info(msg:String){
     this.sendMessage("&a[TeamTp] $msg".colored())

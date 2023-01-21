@@ -5,13 +5,17 @@ import org.bukkit.block.Sign
 import org.bukkit.event.player.PlayerInteractEvent
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.adaptLocation
+import taboolib.common.platform.function.submitAsync
+import taboolib.common.util.asList
 import taboolib.module.chat.colored
 import taboolib.module.configuration.util.getLocation
 import taboolib.platform.util.isRightClickBlock
 import taboolib.platform.util.onlinePlayers
 import taboolib.platform.util.toBukkitLocation
+import java.util.concurrent.CopyOnWriteArrayList
 
 object runScript {
+    private val isProcessing=CopyOnWriteArrayList<String>()
     @SubscribeEvent
     fun run(e:PlayerInteractEvent){
         if(e.isRightClickBlock()){
@@ -32,11 +36,18 @@ object runScript {
                             if(!sign.location.betweeen(loc1,loc2))continue
                             var actions=ConfigObject.config.getStringList("area.${key}.action")
                             if(actions.isEmpty())return
-                            for (onlinePlayer in onlinePlayers) {
-                                debug(onlinePlayer.location.betweeen(loc1,loc2).toString())
-                                if(onlinePlayer.location.betweeen(loc1,loc2)){
-                                    onlinePlayer.eval(actions)
+                            if(isProcessing.contains(key))return
+                            isProcessing.add(key)
+                            submitAsync {
+                                actions.forEach {
+                                    for (onlinePlayer in onlinePlayers) {
+                                        debug(onlinePlayer.location.betweeen(loc1,loc2).toString())
+                                        if(onlinePlayer.location.betweeen(loc1,loc2)){
+                                            it.eval(onlinePlayer)?.get()
+                                        }
+                                    }
                                 }
+                                isProcessing.remove(key)
                             }
                             return
                         }
