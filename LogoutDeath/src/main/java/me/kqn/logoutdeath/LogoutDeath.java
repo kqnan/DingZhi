@@ -19,6 +19,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -42,7 +43,7 @@ public final class LogoutDeath extends JavaPlugin  implements Listener , Command
     private int interval=10;//秒
     private HashMap<UUID,Long> cd=new HashMap<>();
     private String msg="";
-
+    private ArrayList<UUID> deadPlayer=new ArrayList<>();
 
 
     @Override
@@ -58,6 +59,13 @@ public final class LogoutDeath extends JavaPlugin  implements Listener , Command
     }
     @EventHandler
     public void login(PlayerLoginEvent event){
+        if(deadPlayer.contains(event.getPlayer().getUniqueId())){
+            UUID uuid=event.getPlayer().getUniqueId();
+            deadPlayer.remove(event.getPlayer().getUniqueId());
+            Bukkit.getScheduler().runTaskLater(this,()->{
+                if(Bukkit.getPlayer(uuid)!=null)Bukkit.getPlayer(uuid).setHealth(0);
+            },1);
+        }
         Player player=event.getPlayer();
         if(cd.containsKey(player.getUniqueId())&&((System.currentTimeMillis()-cd.get(player.getUniqueId()))<interval* 1000L)){
             event.setResult(PlayerLoginEvent.Result.KICK_OTHER);
@@ -79,7 +87,7 @@ public final class LogoutDeath extends JavaPlugin  implements Listener , Command
             ApplicableRegionSet regions = this.regionContainer.createQuery().getApplicableRegions(player.getLocation());
             Boolean isdead = (Boolean)regions.queryValue(localPlayer,Flags.DeadOnLogout);
             if (isdead != null&&isdead) {
-                player.setHealth(0.0);
+                if(!deadPlayer.contains(player.getUniqueId()))deadPlayer.add(player.getUniqueId());
             }
         }
     }
