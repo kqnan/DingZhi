@@ -7,6 +7,7 @@ import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.BooleanFlag;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -19,6 +20,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
@@ -44,6 +46,7 @@ public final class LogoutDeath extends JavaPlugin  implements Listener , Command
     private HashMap<UUID,Long> cd=new HashMap<>();
     private String msg="";
     private ArrayList<UUID> deadPlayer=new ArrayList<>();
+    private Location loc=null;
 
 
     @Override
@@ -53,6 +56,11 @@ public final class LogoutDeath extends JavaPlugin  implements Listener , Command
         Bukkit.getPluginCommand("ld").setExecutor(this);
         saveDefaultConfig();
         config=YamlConfiguration.loadConfiguration(new File("plugins/LogoutDeath/config.yml"));
+        try {
+            loc=new Location(Bukkit.getWorld(config.getString("loc.world")),config.getDouble("loc.x",0.0),config.getDouble("loc.y",0.0),config.getDouble("loc.z",0.0));
+        }catch (Exception e){
+
+        }
         interval=config.getInt("interval",60);
         msg=config.getString("kick_message","");
         cd.clear();
@@ -63,7 +71,13 @@ public final class LogoutDeath extends JavaPlugin  implements Listener , Command
             UUID uuid=event.getPlayer().getUniqueId();
             deadPlayer.remove(event.getPlayer().getUniqueId());
             Bukkit.getScheduler().runTaskLater(this,()->{
-                if(Bukkit.getPlayer(uuid)!=null)Bukkit.getPlayer(uuid).setHealth(0);
+                if(Bukkit.getPlayer(uuid)!=null) {
+                    //Bukkit.getPlayer(uuid).setHealth(0);
+
+                    if(loc!=null){
+                        Bukkit.getPlayer(uuid).teleport(loc);
+                    }
+                }
             },1);
         }
         Player player=event.getPlayer();
@@ -87,7 +101,10 @@ public final class LogoutDeath extends JavaPlugin  implements Listener , Command
             ApplicableRegionSet regions = this.regionContainer.createQuery().getApplicableRegions(player.getLocation());
             Boolean isdead = (Boolean)regions.queryValue(localPlayer,Flags.DeadOnLogout);
             if (isdead != null&&isdead) {
-                if(!deadPlayer.contains(player.getUniqueId()))deadPlayer.add(player.getUniqueId());
+                if(!deadPlayer.contains(player.getUniqueId())) {
+                    deadPlayer.add(player.getUniqueId());
+                    if(loc!=null)player.teleport(loc);
+                }
             }
         }
     }
@@ -98,8 +115,29 @@ public final class LogoutDeath extends JavaPlugin  implements Listener , Command
                 config=YamlConfiguration.loadConfiguration(new File("plugins/LogoutDeath/config.yml"));
                 interval=config.getInt("interval",60);
                 msg=config.getString("kick_message","");
+                try {
+                    loc=new Location(Bukkit.getWorld(config.getString("loc.world")),config.getDouble("loc.x",0.0),config.getDouble("loc.y",0.0),config.getDouble("loc.z",0.0));
+                }catch (Exception e){
+
+                }
                 cd.clear();
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&',"&a[LogoutDeath]重载完毕"));
+            }
+            if(args.length>=1&&args[0].equalsIgnoreCase("setLoc")&&sender instanceof Player){
+                Player player=(Player) sender;
+                Location loc=player.getLocation();
+                config.set("loc.x",loc.getX());
+                config.set("loc.y",loc.getY());
+                config.set("loc.z",loc.getZ());
+                config.set("loc.world",loc.getWorld().getName());
+                this.loc=loc.clone();
+                try {
+                    config.save(new File("plugins/LogoutDeath/config.yml"));
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&',"&a保存完成"));
+                } catch (IOException e) {
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&',"&a保存出错"));
+                }
+
             }
         }
         return true;
