@@ -8,6 +8,8 @@ import com.sk89q.worldguard.protection.flags.BooleanFlag;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -64,6 +66,7 @@ public final class LogoutDeath extends JavaPlugin  implements Listener , Command
         interval=config.getInt("interval",60);
         msg=config.getString("kick_message","");
         cd.clear();
+
     }
     @EventHandler
     public void login(PlayerLoginEvent event){

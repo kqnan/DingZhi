@@ -1,0 +1,10 @@
+#cmd1：30%概率给玩家30金币，20%概率给玩家20金币
+cmd1:
+  - 'if check random 1 to 100 < 30 then command papi "eco add 30 %player_name%" as console'
+  - 'if check random 1 to 100 < 20 then command papi "eco add 20 %player_name%" as console'
+#cmd2：30%概率给玩家30金币，如果这30%命中了，那么退出程序（即不会再判断是否给玩家20金币。
+cmd2:
+  - '
+  if check random 1 to 100 < 30 then all [ command papi "eco add 30 %player_name%" as console , exit success ]
+  if check random 1 to 100 < 20 then all [ command papi "eco add 20 %player_name%" as console , exit success ]
+'
