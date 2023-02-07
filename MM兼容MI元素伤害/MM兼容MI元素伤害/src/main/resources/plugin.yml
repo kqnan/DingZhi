@@ -1,0 +1,7 @@
+name: ElementDamage
+version: '${project.version}'
+main: me.kqn.elementdamage.ElementDamage
+api-version: 1.18
+depend:
+  - MythicMobs
+  - MMOItems
