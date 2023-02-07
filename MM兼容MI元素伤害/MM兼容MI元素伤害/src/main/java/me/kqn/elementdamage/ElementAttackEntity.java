@@ -93,7 +93,7 @@ public class ElementAttackEntity {
         }
 
 
-        //  System.out.println(finalDamage+"   "+initialDamage);
+      //    System.out.println(finalDamage+"   "+initialDamage);
         return finalDamage - this.initialDamage;
     }
 }

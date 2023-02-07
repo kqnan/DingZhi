@@ -47,10 +47,11 @@ public class Skill extends DamagingMechanic implements ITargetedEntitySkill {
     public SkillResult castAtEntity(SkillMetadata data, AbstractEntity target) {
         if (!target.isDead() && target.getBukkitEntity() instanceof LivingEntity && !data.getCaster().isUsingDamageSkill() && !(target.getHealth() <= 0.0)&&data.getCaster().getEntity().getBukkitEntity() instanceof LivingEntity) {
             LivingEntity caster=(LivingEntity) data.getCaster().getEntity().getBukkitEntity();
-            ElementAttackEntity ea=new ElementAttackEntity(caster,this.element,amount,(LivingEntity) target.getBukkitEntity());
-            amount=amount+ea.getDamageModifier();
+            Double amt=amount;
+            ElementAttackEntity ea=new ElementAttackEntity(caster,this.element,amt,(LivingEntity) target.getBukkitEntity());
+            amt=amt+ea.getDamageModifier();
 
-            if(amount>0.0)this.doDamage(data.getCaster(),target,amount);
+            if(amt>0.0)this.doDamage(data.getCaster(),target,amt);
             return SkillResult.SUCCESS;
 
         } else {
