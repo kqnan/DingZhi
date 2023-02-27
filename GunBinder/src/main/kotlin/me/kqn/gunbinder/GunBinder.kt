@@ -7,5 +7,6 @@ object GunBinder : Plugin() {
 
     override fun onEnable() {
         info("Successfully running ExamplePlugin!")
+        var i=1
     }
 }
