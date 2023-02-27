@@ -1,0 +1,22 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="MM兼容MI元素伤害:jar">
+    <output-path>D:/服务端大全/星云空岛/1.19.2hpy空岛v1.0.6/plugins</output-path>
+    <root id="archive" name="MM兼容MI元素伤害.jar">
+      <element id="module-output" name="ElementDamage" />
+      <element id="extracted-dir" path="D:/.m2/repository/com/tencentcloudapi/tencentcloud-sdk-java-kms/3.1.213/tencentcloud-sdk-java-kms-3.1.213.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/.m2/repository/com/tencentcloudapi/tencentcloud-sdk-java-common/3.1.213/tencentcloud-sdk-java-common-3.1.213.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/.m2/repository/com/qcloud/cos_api/5.6.75/cos_api-5.6.75.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/.m2/repository/com/fasterxml/jackson/core/jackson-databind/2.12.1/jackson-databind-2.12.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/.m2/repository/com/fasterxml/jackson/core/jackson-core/2.12.1/jackson-core-2.12.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/.m2/repository/com/fasterxml/jackson/core/jackson-annotations/2.12.1/jackson-annotations-2.12.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/.m2/repository/com/squareup/okhttp/logging-interceptor/2.7.5/logging-interceptor-2.7.5.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/.m2/repository/com/squareup/okhttp/okhttp/2.7.5/okhttp-2.7.5.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/.m2/repository/com/squareup/okio/okio/1.12.0/okio-1.12.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/.m2/repository/joda-time/joda-time/2.9.9/joda-time-2.9.9.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/.m2/repository/org/apache/httpcomponents/httpcore/4.4.13/httpcore-4.4.13.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/.m2/repository/org/apache/httpcomponents/httpclient/4.5.13/httpclient-4.5.13.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="D:/.m2/repository/javax/xml/bind/jaxb-api/2.3.0/jaxb-api-2.3.0.jar" path-in-jar="/" />
+      <element id="file-copy" path="$PROJECT_DIR$/MM兼容MI元素伤害/src/main/java/me/kqn/elementdamage/server.txt" />
+    </root>
+  </artifact>
+</component>
