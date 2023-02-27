@@ -11,11 +11,19 @@ taboolib {
     install("module-configuration")
     install("platform-bukkit")
     install("expansion-command-helper")
+    install("module-chat")
     classifier = null
     version = "6.0.10-94"
 }
 
 repositories {
+    maven("https://jitpack.io")
+    maven("https://maven.aliyun.com/repository/public")
+    maven( "https://maven.aliyun.com/repository/central" )
+    maven ( "https://maven.aliyun.com/repository/google")
+    maven ( "https://maven.aliyun.com/repository/public" )
+    maven(  "https://maven.aliyun.com/repository/gradle-plugin" )
+    maven ("https://repo.codemc.org/repository/maven-public/")
     mavenCentral()
 }
 
@@ -24,6 +32,7 @@ dependencies {
     compileOnly("ink.ptms.core:v11902:11902-minimize:mapped")
     compileOnly("ink.ptms.core:v11902:11902-minimize:universal")
     compileOnly(kotlin("stdlib"))
+    taboo("de.tr7zw:item-nbt-api:2.10.0")
     compileOnly(fileTree("libs"))
 }
 

@@ -1,6 +1,7 @@
 package me.kqn.gunbinder
 
 import com.shampaggon.crackshot.events.WeaponShootEvent
+import de.tr7zw.changeme.nbtapi.NBTItem
 import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
 import org.bukkit.event.entity.EntityPickupItemEvent
@@ -12,6 +13,7 @@ import org.bukkit.persistence.PersistentDataType
 import taboolib.common.platform.Plugin
 import taboolib.common.platform.event.SubscribeEvent
 import taboolib.common.platform.function.info
+import taboolib.module.chat.colored
 import taboolib.platform.util.hasLore
 import taboolib.platform.util.isAir
 import taboolib.platform.util.modifyMeta
@@ -23,14 +25,15 @@ object GunBinder : Plugin() {
 
     }
     private fun bind(item: ItemStack, p: Player){
-        item.modifyMeta<ItemMeta> {
-            this.persistentDataContainer.set(NamespacedKey.fromString("GunBinder")!!, PersistentDataType.STRING,p.uniqueId.toString())
-        }
+        var nbtitem=NBTItem(item)
+        nbtitem.setString("GunBinder",p.uniqueId.toString())
+        nbtitem.applyNBT(item)
     }
     private fun isBind(item:ItemStack,id: UUID):Boolean{
-        val bindID=item.itemMeta?.persistentDataContainer?.get(NamespacedKey.fromString("GunBinder")!!, PersistentDataType.STRING)?:return false
+        if(item.isAir)return false
+        val bindID=NBTItem(item).getString("GunBinder")
         if(bindID==id.toString())return true
-        return  false
+        return false
 
     }
 
@@ -54,11 +57,12 @@ object GunBinder : Plugin() {
         val item=e.player.inventory.itemInMainHand
         info("Íæ¼Ò${e.player.name} Éä»÷")
         if(item.isAir)return
+        if(isBind(item,e.player.uniqueId))return
         for (key in ConfigFile.config.getKeys(false)) {
-            if(item.hasLore(ConfigFile.config.getString(key)?:continue)){
+            info(ConfigFile.config.getString(key)?.colored()?:"")
+            if(item.hasLore(ConfigFile.config.getString(key)?.colored()?:continue)){
                 info("°ó¶¨")
                 bind(item,e.player)
-
                 return
             }
         }
