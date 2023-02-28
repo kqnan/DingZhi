@@ -10,6 +10,7 @@ taboolib {
     install("common-5")
     install("module-configuration")
     install("platform-bukkit")
+
     install("expansion-command-helper")
     install("module-chat")
     classifier = null
