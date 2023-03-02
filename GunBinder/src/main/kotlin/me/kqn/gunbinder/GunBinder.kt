@@ -76,21 +76,7 @@ object GunBinder : Plugin() {
 
     }
     //×èÖ¹¿ª»ð
-    @SubscribeEvent
-    fun noShoot(e:WeaponPreShootEvent){
-        val item=e.player.inventory.itemInMainHand
-        if(item.isAir())return
-        val nbti=NBTItem(item)
-        if(!nbti.hasKey("GunBinder"))return
-        if(!isBind(item,e.player.uniqueId))
-        {
-            val owner=Bukkit.getPlayer(UUID.fromString(nbti.getString("GunBinder")))
-            owner?.let{
-                e.player.sendMessage(MessageFile.notowner.replace("%player%",it.name).colored())
-            }
-            e.isCancelled=true
-        }
-    }
+
     @SubscribeEvent
     fun noShoot2(e:WeaponPrepareShootEvent){
         val item=e.player.inventory.itemInMainHand
@@ -99,6 +85,10 @@ object GunBinder : Plugin() {
         if(!nbti.hasKey("GunBinder"))return
         if(!isBind(item,e.player.uniqueId))
         {
+            val owner=Bukkit.getOfflinePlayer(UUID.fromString(nbti.getString("GunBinder")))
+
+            owner.name?.let { e.player.sendMessage(MessageFile.notowner.replace("%player%",it).colored()) }
+
             e.isCancelled=true
         }
     }
