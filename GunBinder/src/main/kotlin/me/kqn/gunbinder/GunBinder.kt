@@ -4,6 +4,7 @@ import com.shampaggon.crackshot.events.WeaponPreShootEvent
 import com.shampaggon.crackshot.events.WeaponPrepareShootEvent
 import com.shampaggon.crackshot.events.WeaponShootEvent
 import de.tr7zw.changeme.nbtapi.NBTItem
+import org.bukkit.Bukkit
 import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
 import org.bukkit.event.entity.EntityPickupItemEvent
@@ -34,6 +35,9 @@ object GunBinder : Plugin() {
                     {
                         if(hasLore(it)&&!hasNBTkey(it)){
                             bind(it,onlinePlayer)
+                            setLore(it,onlinePlayer)
+                        }
+                        else if (isBind(it,onlinePlayer.uniqueId)&&!it.hasLore("&7ЫљгаепЃК${onlinePlayer.name}".colored())){
                             setLore(it,onlinePlayer)
                         }
                     }
@@ -80,6 +84,10 @@ object GunBinder : Plugin() {
         if(!nbti.hasKey("GunBinder"))return
         if(!isBind(item,e.player.uniqueId))
         {
+            val owner=Bukkit.getPlayer(UUID.fromString(nbti.getString("GunBinder")))
+            owner?.let{
+                e.player.sendMessage(MessageFile.notowner.replace("%player%",it.name).colored())
+            }
             e.isCancelled=true
         }
     }
